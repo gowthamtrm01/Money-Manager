@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = 3000;
 
@@ -7,6 +8,11 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://gowtham:Saipallavi@0102@cluster0.wbk9z.mongodb.net/movieData',
     { useNewUrlParser: true, useUnifiedTopology: true }
 )
+
+const staticFiles = express.static(path.join(__dirname, '../build'))
+app.use(staticFiles);
+
+app.use('/*', staticFiles)
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -33,7 +39,7 @@ const Income = mongoose.model('Income', IncomeSchema, 'income_collection');
 const Expense = mongoose.model('Expense', ExpenseSchema, 'expense_collection');
 
 app.get('/', (req, res) => {
-
+    res.send('Hello World')
 })
 
 app.post('/yearly_expenditure', (req, res) => {
