@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.warning{
+  color: red;
+}
+
+.button {
+  margin-top: 10px;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.move {
+  padding-left: 10px;
+}
+
+.link:hover,
+.link:active {
+  color: inherit;
+}

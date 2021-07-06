@@ -1,17 +1,62 @@
-import React from 'react';
+import React, { useState, useReducer, createContext } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './components/homePage';
+import incomReducer from './components/incomeReducer';
+import expenseReducer from './components/expenseReducer';
+import AppNavbar from './components/navbar';
+import AboutPage from './components/about';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const modalContext = createContext(null);
+export { modalContext };
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const incomeContext = createContext(null);
+export { incomeContext };
+
+const expenseContext = createContext(null);
+export { expenseContext };
+
+const Routers = () => {
+
+  const [show, setShow] = useState(false);
+  const handleOpen = () => {
+    setShow(true);
+  }
+  const handleClose = () => {
+    setShow(false);
+  }
+
+  const income = [];
+  const expense = [];
+
+  console.log(income);
+
+  const [state, dispatch] = useReducer(incomReducer, income);
+  console.log('state:', state);
+  const [expenseState, expenseDispatch] = useReducer(expenseReducer, expense)
+  console.log('expenseState:', expenseState);
+
+  return (
+    <Router>
+      <AppNavbar />
+      <expenseContext.Provider value={{ expenseState, expenseDispatch }}>
+        <incomeContext.Provider value={{ state, dispatch }}>
+          <Switch>
+            <modalContext.Provider value={{ show, handleOpen, handleClose }}>
+              <Route exact path='/'>
+                <Home />
+              </Route>
+              <Route exact path="/about">
+                <AboutPage />
+              </Route>
+            </modalContext.Provider>
+          </Switch>
+        </incomeContext.Provider>
+      </expenseContext.Provider>
+    </Router>
+  );
+}
+
+ReactDOM.render(<Routers />, document.getElementById('root'));
+
